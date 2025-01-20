@@ -1,41 +1,40 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { invoke } from "@tauri-apps/api/core";
-
-const greetMsg = ref("");
-const name = ref("");
+import TreeMap from "./TreeMap.vue";
 
 const url = ref("/Users/lixu/play/")
 
 async function greet() {
   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-  let res  = await invoke("open_dir", { path: url.value });
+  let res = await invoke("open_dir", { path: url.value });
   console.log(res)
 }
 async function dirstat() {
-  let res  = await invoke("dir_stat", { path: url.value });
+  let res = await invoke("dir_stat", { path: url.value });
   console.log(res)
 }
 </script>
 
 <template>
   <main class="container">
-    <section>
-      <input type="text" v-model="url">
-      <button @click="greet">open</button>
-      <button @click="dirstat">stat</button>
-    </section>
-    <section>
+    <Splitter style="height: 100vh" class="mb-8">
+      <SplitterPanel class="flex items-center justify-center" :size="25" :min-size="15" > 
+        <input type="text" v-model="url">
+        <button @click="greet">open</button>
+        <button @click="dirstat">stat</button>
 
-    </section>
-     
+      </SplitterPanel>
+      <SplitterPanel class="flex items-center justify-center" :size="75"> 
+        <TreeMap></TreeMap>
+      </SplitterPanel>
+    </Splitter>
+
+
   </main>
 </template>
 
-<style scoped>
-
-
-</style>
+<style scoped></style>
 <style>
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
@@ -56,7 +55,7 @@ async function dirstat() {
 .container {
   margin: 0;
   display: grid;
- 
+
 }
 
 
@@ -100,6 +99,7 @@ button {
 button:hover {
   border-color: #396cd8;
 }
+
 button:active {
   border-color: #396cd8;
   background-color: #e8e8e8;
@@ -129,9 +129,9 @@ button {
     color: #ffffff;
     background-color: #0f0f0f98;
   }
+
   button:active {
     background-color: #0f0f0f69;
   }
 }
-
 </style>
